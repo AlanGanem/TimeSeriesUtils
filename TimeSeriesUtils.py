@@ -81,7 +81,6 @@ def chunk_data_by_date_df(df,pred_period,look_back_period,input_columns, output_
     print('total amount of samples = {} \n learning window = {} \n prediction horizon = {}'.format((X_train.shape[0] + X_val.shape[0]),X_train.shape[1],y_train.shape[1]))    
     return X_train, y_train, X_val, y_val
 
-
 def chunk_data_by_date(X,pred_period,look_back_period, output_index = -1,output_axis =-1,data_frame_input = False,flatten = False,static = False):
     '''
     Groups data in date period chuncks predefined for X and y and splits both
