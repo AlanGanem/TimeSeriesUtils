@@ -20,6 +20,7 @@ from scipy.stats import variation
 import calendar
 import datetime
 
+
 def chunk_data_by_date_df(df,pred_period,look_back_period,input_columns, output_columns ,feature_axis =-1,n_validation_intervals = 1,flatten = False,static = False):
     '''
     Groups data in date period chuncks predefined for X and y and splits both
