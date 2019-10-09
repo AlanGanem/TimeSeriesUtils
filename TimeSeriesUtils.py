@@ -8,9 +8,9 @@ import numpy as np
 from sklearn.preprocessing import OneHotEncoder
 #import skimage.measure
 #from func_get_product_history import get_product_history
-from func_gini import gini
-from func_price_clustering import price_clustering
-import wquantiles as wq
+#from func_gini import gini
+#from func_price_clustering import price_clustering
+#import wquantiles as wq
 from scipy import stats
 import sklearn
 import pandas as pd
@@ -727,3 +727,17 @@ def df_to_dict(df, groupby,get_dummies = False):
             data_dict[tuple(cols)] = df[(df[cols] == 1).prod(axis = 1).astype(bool)].sort_index()
     
     return data_dict
+
+def data_transformer(train_data_dict, key, pred_period, look_back_period, encoder_inputs, decoder_inputs, **kwargs):
+    
+    X_train, y_train, X_val, y_val = chunk_and_concatenate_dict({key:train_data_dict[key].assign(date = train_data_dict[key].index)},pred_period,look_back_period,encoder_inputs,['date']+decoder_inputs,**kwargs)
+    X_covars_train = y_train.take(range(1,y_train.shape[-1]-1),axis = -1)
+    X_covars_val = y_val.take(range(1,y_val.shape[-1]-1),axis = -1)
+    period_train = y_train.take([0],axis = -1)
+    period_val = y_val.take([0],axis = -1)
+    y_train = y_train.take([-1],axis = -1)
+    y_val = y_val.take([-1],axis = -1)
+        
+    return {'period_train':period_train,'period_val':period_val,'X_train':X_train, 'X_covars_train':X_covars_train, 'y_train':y_train, 'X_val':X_val, 'X_covars_val':X_covars_val, 'y_val':y_val}
+
+
